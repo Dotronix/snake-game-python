@@ -1,27 +1,26 @@
 import pyglet
 import glob
 import os
-import sys
 
 
 script_dir = os.path.dirname(__file__)
-path = os.path.join(script_dir, 'obstacle.png')
+path = os.path.join(script_dir, 'images/obstacle.png')
 
 obstacles_img = pyglet.image.load(path)
 obstacles_batch = pyglet.graphics.Batch()
 obstacles = []
 game_level = 0
-phase_files = glob.glob("{}/p*.txt".format(script_dir))
+level_files = glob.glob("{}/levels/p*.txt".format(script_dir))
 
 obstacles_list = []
 
 
 def open_new_obstacles_file():
     global obstacles_list
-    if game_level >= len(phase_files):
+    if game_level >= len(level_files):
         raise SystemExit
-        #pass
-    file = open(phase_files[game_level], "r+")
+
+    file = open(level_files[game_level], "r+")
     obstacles_list = file.readlines()
     file.close()
 

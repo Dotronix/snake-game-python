@@ -1,5 +1,3 @@
-#! /usr/bin/env python
-
 import pyglet
 from pyglet.window import key
 import random
@@ -7,14 +5,15 @@ from collections import deque
 import obstacle
 import os
 
-new_script_dir = os.path.dirname(__file__)
 
+PATH = os.path.dirname(__file__)
 
 # Globals constants
 resolution = 640, 480
 sprite_size = 20
 window = pyglet.window.Window(caption="Snake")
-background_img_path = os.path.join(new_script_dir, 'background.png')
+
+background_img_path = PATH + '/images/background.png'
 background = pyglet.image.load(background_img_path)
 
 # Global vars
@@ -23,7 +22,7 @@ last_key_pressed = 0
 score = 0
 
 # Snake sprite
-snake_img_path = os.path.join(new_script_dir, 'snake.png')
+snake_img_path = PATH + "/images/snake.png"
 snake_img = pyglet.image.load(snake_img_path)
 snake_batch = pyglet.graphics.Batch()
 snake = deque([])
@@ -39,14 +38,14 @@ def create_snake():
 create_snake()
 
 # Food sprite
-food_img_path = os.path.join(new_script_dir, 'food.png')
+food_img_path = PATH + "/images/food.png"
 food_img = pyglet.image.load(food_img_path)
 food_batch = pyglet.graphics.Batch()
 food = []
 
 
 # Score
-font_path = os.path.join(new_script_dir, 'font.ttf')
+font_path = os.path.join(PATH, 'font.ttf')
 pyglet.font.add_file(font_path)
 font = pyglet.font.load("FFF Forward")
 score_label = pyglet.text.Label("Score: {}".format(score),
@@ -57,6 +56,7 @@ score_label = pyglet.text.Label("Score: {}".format(score),
 
 # Obstacles
 
+
 def random_xy_coordinates():
     return random.randrange(0, resolution[0], sprite_size), random.randrange(0, resolution[1], sprite_size)
 
@@ -64,7 +64,7 @@ def random_xy_coordinates():
 def generate_new_food():
     for i in range(0, (obstacle.game_level+1) * 4):
         g = [1]
-        while (len(g)!=0):
+        while len(g)!=0:
             x, y = random_xy_coordinates()
             g = [i for i,o in enumerate(obstacle.obstacles) if o.x == x and o.y == y]
         food.append(pyglet.sprite.Sprite(food_img, x, y,
@@ -125,12 +125,10 @@ def game_over():
     score_label.text = "Score:{}".format(score)
 
 
-
 @window.event
 def on_key_press(symbol, modifiers):
     global last_key_pressed
     last_key_pressed = symbol
-
 
 obstacle.open_new_obstacles_file()
 obstacle.generate_new_obstacles()
@@ -168,16 +166,12 @@ def update(dt):
         obstacle.generate_new_obstacles()
         generate_new_food()
 
-    if len(tail) > 1:
+    if len(tail) > 1 or len(obstacles_touched):
         print("Game over")
         game_over()
-    if len(obstacles_touched):
-        print("game over")
-        game_over()
 
-
-def main():
+if __name__ == '__main__':
+    print("running")
     pyglet.clock.schedule_interval(update, 1 / 12)
     pyglet.app.run()
 
-main()
