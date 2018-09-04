@@ -82,13 +82,22 @@ def on_draw():
 
 
 def new_orientation(orientation, key_pressed):
-    if key_pressed == key.RIGHT:
-        orientation -= 90
-    elif key_pressed == key.LEFT:
-        orientation += 90
-    if orientation < 0:
-        orientation += 360
-    return orientation % 360
+    if orientation == 0 or orientation == 180:
+        if key_pressed == key.UP:
+            orientation = 90
+        if key_pressed == key.DOWN:
+            orientation = 270
+    if orientation == 90 or orientation == 270:
+        if key_pressed == key.LEFT:
+            orientation = 180
+        if key_pressed == key.RIGHT:
+            orientation = 0
+    if orientation == 270:
+        if key_pressed == key.LEFT:
+            orientation = 180
+        if key_pressed == key.RIGHT:
+            orientation = 0
+    return orientation
 
 
 def new_position(orientation):
